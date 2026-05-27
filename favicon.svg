@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1437"/>
+      <stop offset="100%" stop-color="#1A2A6C"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4FC3D0"/>
+      <stop offset="100%" stop-color="#0D9BAA"/>
+    </linearGradient>
+  </defs>
+  <!-- Background rounded square -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Accent ring -->
+  <rect x="3" y="3" width="58" height="58" rx="12"
+        fill="none" stroke="url(#ring)" stroke-width="2" opacity="0.7"/>
+  <!-- Corner accent dots -->
+  <circle cx="10" cy="10" r="2" fill="#4FC3D0" opacity="0.5"/>
+  <circle cx="54" cy="54" r="2" fill="#4FC3D0" opacity="0.5"/>
+  <!-- SV3 text -->
+  <text x="32" y="42"
+        font-family="'Courier New', Courier, monospace"
+        font-weight="900"
+        font-size="20"
+        fill="white"
+        text-anchor="middle"
+        letter-spacing="0.5">SV3</text>
+  <!-- Thin underline accent -->
+  <line x1="14" y1="47" x2="50" y2="47"
+        stroke="#4FC3D0" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+</svg>

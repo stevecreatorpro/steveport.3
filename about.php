@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Stephen &mdash; Steveport v3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #060610;
+      --surface:  rgba(255,255,255,0.05);
+      --border:   rgba(255,255,255,0.10);
+      --accent:   #7c6fff;
+      --accent2:  #ff6b6b;
+      --accent3:  #43e8b0;
+      --text:     rgba(255,255,255,0.88);
+      --muted:    rgba(255,255,255,0.45);
+      --glow:     rgba(124,111,255,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* ── MESH BACKGROUND ── */
+    .mesh {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(124,111,255,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(67,232,176,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 35% at 65% 15%, rgba(255,107,107,0.07) 0%, transparent 60%);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      z-index: 100;
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(6,6,16,0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo sub { font-size: 0.6em; opacity: 0.6; }
+
+    .nav-back {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.45rem 1rem;
+      transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .nav-back:hover {
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--glow);
+    }
+
+    /* ── LAYOUT ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 7rem 2rem 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+    }
+
+    /* ── SECTION LABEL ── */
+    .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .label::after {
+      content: '';
+      flex: 1;
+      max-width: 48px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    /* ── GLASS CARD ── */
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: clamp(1.8rem, 4vw, 2.8rem);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass:hover {
+      border-color: rgba(124,111,255,0.3);
+      box-shadow: 0 12px 48px rgba(124,111,255,0.1);
+    }
+
+    /* ── HERO SECTION ── */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    @media (max-width: 780px) { .hero-grid { grid-template-columns: 1fr; } }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .hero-name {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-name span {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-bio {
+      font-size: clamp(0.95rem, 2vw, 1.08rem);
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 55ch;
+      margin-bottom: 2rem;
+    }
+
+    .hero-bio b { color: var(--text); font-weight: 700; }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border-radius: 99px;
+      border: 1px solid rgba(124,111,255,0.35);
+      color: rgba(124,111,255,0.9);
+      background: rgba(124,111,255,0.07);
+    }
+
+    /* Developer avatar SVG card */
+    .avatar-card {
+      background: linear-gradient(145deg, rgba(124,111,255,0.12), rgba(67,232,176,0.06));
+      border: 1px solid rgba(124,111,255,0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,111,255,0.2), transparent 70%);
+    }
+
+    .avatar-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .avatar-stat .num {
+      font-family: 'Space Mono', monospace;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .avatar-stat .num span { color: var(--accent); }
+
+    .avatar-stat .desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .mini-stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem;
+      text-align: center;
+    }
+
+    .mini-stat .n {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent3);
+      display: block;
+    }
+
+    .mini-stat .l {
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── TWO-COL SECTION ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── SECTION HEADING ── */
+    .section-h {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.1rem;
+    }
+
+    .section-h span { color: var(--accent); }
+
+    .section-p {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .section-p b { color: var(--text); font-weight: 700; }
+
+    /* ── SKILL BARS ── */
+    .skill-bars { display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem; }
+
+    .bar-row { display: flex; flex-direction: column; gap: 0.3rem; }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .bar-track {
+      height: 5px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transform-origin: left;
+      animation: barIn 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
+      transform: scaleX(0);
+    }
+
+    @keyframes barIn { to { transform: scaleX(1); } }
+
+    .bar-fill.js   { background: linear-gradient(90deg, #f7df1e, #e8a21a); animation-delay: 0.1s; }
+    .bar-fill.php  { background: linear-gradient(90deg, #8892be, #4f5b93); animation-delay: 0.2s; }
+    .bar-fill.java { background: linear-gradient(90deg, #f89820, #e76f00); animation-delay: 0.3s; }
+    .bar-fill.py   { background: linear-gradient(90deg, #4b8bbe, #306998); animation-delay: 0.4s; }
+    .bar-fill.css  { background: linear-gradient(90deg, #43e8b0, #1fa882); animation-delay: 0.5s; }
+    .bar-fill.ai   { background: linear-gradient(90deg, #7c6fff, #c084fc); animation-delay: 0.6s; }
+
+    /* ── SKILL ICON GRID ── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .icon-tile {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.1rem 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.55rem;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      cursor: default;
+    }
+
+    .icon-tile:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--glow);
+    }
+
+    .icon-tile svg { display: block; }
+
+    .icon-tile span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ── AI SECTION ── */
+    .ai-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1.2rem;
+    }
+
+    .ai-chip {
+      padding: 0.4rem 1rem;
+      border-radius: 99px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(124,111,255,0.1);
+      border: 1px solid rgba(124,111,255,0.25);
+      color: rgba(200,190,255,0.9);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .ai-chip:hover { background: rgba(124,111,255,0.2); border-color: rgba(124,111,255,0.5); }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 1.8rem; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 5px; top: 8px;
+      width: 2px;
+      height: calc(100% - 16px);
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .tl-item { position: relative; padding-bottom: 2rem; }
+    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -1.55rem;
+      top: 6px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .tl-year {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .tl-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .tl-desc {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── SPEED / TIME STATS ── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 680px) { .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .metric-tile {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .metric-tile:hover { border-color: var(--accent3); box-shadow: 0 8px 24px rgba(67,232,176,0.1); }
+
+    .metric-tile .big {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--accent3);
+      line-height: 1;
+    }
+
+    .metric-tile .unit {
+      font-size: 0.65rem;
+      font-family: 'Space Mono', monospace;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* ── RADAR CHART ── */
+    .chart-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── CTA ── */
+    .cta-band {
+      background: linear-gradient(135deg, rgba(124,111,255,0.12), rgba(67,232,176,0.06));
+      border: 1px solid rgba(124,111,255,0.25);
+      border-radius: 20px;
+      padding: clamp(2rem, 5vw, 3rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-band h2 {
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .cta-band h2 span { color: var(--accent); }
+
+    .cta-btn {
+      padding: 0.9rem 2.4rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #000;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(124,111,255,0.4);
+    }
+
+    .cta-btn:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,111,255,0.55); }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ── DIVIDER ── */
+    .divider { width: 100%; height: 1px; background: var(--border); }
+
+    @media (max-width: 480px) { main { padding: 6rem 1.2rem 4rem; gap: 3.5rem; } }
+  </style>
+</head>
+<body>
+
+  <div class="mesh"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.php" class="nav-logo">steveport v<sub>3</sub></a>
+    <a href="index.php" class="nav-back">&larr; Back Home</a>
+  </nav>
+
+  <main>
+
+    <!-- ══ HERO ══ -->
+    <div class="hero-grid reveal">
+      <div>
+        <p class="hero-eyebrow">About Me &mdash; Full Profile</p>
+        <h1 class="hero-name">
+          I build the<br><span>web of tomorrow,</span><br>today.
+        </h1>
+        <p class="hero-bio">
+          I'm <b>Stephen</b>, a passionate <b>Full-Stack Developer</b> with over <b>4 years</b> of hands-on
+          experience crafting end-to-end digital products. From pixel-perfect frontends to
+          bulletproof backends, I live at the intersection of engineering and creativity &mdash;
+          turning ideas into fast, scalable, production-ready applications that users genuinely enjoy.
+        </p>
+        <div class="hero-tags">
+          <span class="tag">Full-Stack</span>
+          <span class="tag">4+ Years</span>
+          <span class="tag">AI-Powered</span>
+          <span class="tag">Freelance-Ready</span>
+          <span class="tag">Problem Solver</span>
+        </div>
+      </div>
+
+      <!-- Stat card -->
+      <div class="avatar-card">
+        <!-- Developer SVG illustration -->
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="58" fill="rgba(124,111,255,0.1)" stroke="rgba(124,111,255,0.3)" stroke-width="1.5"/>
+          <!-- Screen -->
+          <rect x="22" y="35" width="76" height="52" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(124,111,255,0.4)" stroke-width="1.5"/>
+          <rect x="28" y="41" width="64" height="40" rx="3" fill="rgba(6,6,16,0.8)"/>
+          <!-- Code lines -->
+          <rect x="32" y="47" width="22" height="3" rx="1.5" fill="#7c6fff" opacity="0.9"/>
+          <rect x="58" y="47" width="14" height="3" rx="1.5" fill="#43e8b0" opacity="0.7"/>
+          <rect x="36" y="54" width="18" height="3" rx="1.5" fill="rgba(255,255,255,0.3)"/>
+          <rect x="58" y="54" width="24" height="3" rx="1.5" fill="#ff6b6b" opacity="0.7"/>
+          <rect x="32" y="61" width="30" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+          <rect x="36" y="68" width="20" height="3" rx="1.5" fill="#7c6fff" opacity="0.6"/>
+          <rect x="60" y="68" width="12" height="3" rx="1.5" fill="#43e8b0" opacity="0.5"/>
+          <!-- Stand -->
+          <rect x="52" y="87" width="16" height="5" rx="2" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <rect x="44" y="91" width="32" height="4" rx="2" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <!-- Floating dots -->
+          <circle cx="98" cy="32" r="3" fill="#43e8b0" opacity="0.6"/>
+          <circle cx="18" cy="72" r="2.5" fill="#7c6fff" opacity="0.5"/>
+          <circle cx="104" cy="80" r="2" fill="#ff6b6b" opacity="0.5"/>
+        </svg>
+
+        <div class="avatar-stat">
+          <div class="num">4<span>+</span></div>
+          <div class="desc">Years of Experience</div>
+        </div>
+
+        <div class="stat-row">
+          <div class="mini-stat"><span class="n">20+</span><span class="l">Projects</span></div>
+          <div class="mini-stat"><span class="n">6</span><span class="l">Languages</span></div>
+          <div class="mini-stat"><span class="n">100%</span><span class="l">Committed</span></div>
+          <div class="mini-stat"><span class="n">AI</span><span class="l">Integrated</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SKILLS ══ -->
+    <div class="reveal">
+      <div class="label">Technical Skills</div>
+      <div class="two-col glass">
+        <div>
+          <h2 class="section-h">Languages &amp;<br><span>Frameworks</span></h2>
+          <p class="section-p">
+            My technical foundation spans <b>six core languages</b>, each chosen for its strengths
+            in building different parts of the stack. From dynamic interfaces to server-side logic
+            and scripting pipelines, I write clean, maintainable code that scales. Every project
+            sharpens my command of each language further.
+          </p>
+
+          <!-- Icon grid -->
+          <div class="icon-grid">
+            <!-- JS -->
+            <div class="icon-tile">
+              <svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#f7df1e"/><text x="7" y="24" font-family="monospace" font-weight="bold" font-size="14" fill="#000">JS</text></svg>
+              <span>JavaScript</span>
+            </div>
+            <!-- PHP -->
+            <div class="icon-tile">
+              <svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#4f5b93"/><text x="4" y="24" font-family="monospace" font-weight="bold" font-size="13" fill="#fff">PHP</text></svg>
+              <span>PHP</span>
+            </div>
+            <!-- Java -->
+            <div class="icon-tile">
+              <svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#e76f00"/><text x="3" y="24" font-family="monospace" font-weight="bold" font-size="11" fill="#fff">JAVA</text></svg>
+              <span>Java</span>
+            </div>
+            <!-- Python -->
+            <div class="icon-tile">
+              <svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#306998"/><text x="5" y="24" font-family="monospace" font-weight="bold" font-size="12" fill="#ffd343">PY</text></svg>
+              <span>Python</span>
+            </div>
+            <!-- HTML/CSS -->
+            <div class="icon-tile">
+              <svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#e34c26"/><text x="3" y="24" font-family="monospace" font-weight="bold" font-size="10" fill="#fff">HTML</text></svg>
+              <span>HTML/CSS</span>
+            </div>
+            <!-- SQL -->
+            <div class="icon-tile">
+              <svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#336791"/><text x="3" y="24" font-family="monospace" font-weight="bold" font-size="11" fill="#fff">SQL</text></svg>
+              <span>SQL / DB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skill bars -->
+        <div>
+          <p class="section-p" style="margin-bottom:1.4rem;">
+            Each bar reflects my <b>current proficiency</b> and the depth of projects completed
+            using that technology &mdash; not just syntax knowledge, but architectural fluency.
+          </p>
+          <div class="skill-bars">
+            <div class="bar-row">
+              <div class="bar-label"><span>JavaScript</span><span>92%</span></div>
+              <div class="bar-track"><div class="bar-fill js" style="width:92%"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>PHP</span><span>88%</span></div>
+              <div class="bar-track"><div class="bar-fill php" style="width:88%"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>Java</span><span>82%</span></div>
+              <div class="bar-track"><div class="bar-fill java" style="width:82%"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>Python</span><span>85%</span></div>
+              <div class="bar-track"><div class="bar-fill py" style="width:85%"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>HTML &amp; CSS</span><span>96%</span></div>
+              <div class="bar-track"><div class="bar-fill css" style="width:96%"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>AI Integration</span><span>80%</span></div>
+              <div class="bar-track"><div class="bar-fill ai" style="width:80%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ AI KNOWLEDGE ══ -->
+    <div class="reveal">
+      <div class="label">Artificial Intelligence</div>
+      <div class="two-col">
+        <!-- SVG visual -->
+        <div class="glass" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;min-height:280px;">
+          <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Neural network illustration -->
+            <!-- Input layer -->
+            <circle cx="30" cy="50" r="10" fill="rgba(124,111,255,0.2)" stroke="#7c6fff" stroke-width="1.5"/>
+            <circle cx="30" cy="90" r="10" fill="rgba(124,111,255,0.2)" stroke="#7c6fff" stroke-width="1.5"/>
+            <circle cx="30" cy="130" r="10" fill="rgba(124,111,255,0.2)" stroke="#7c6fff" stroke-width="1.5"/>
+            <!-- Hidden layer 1 -->
+            <circle cx="90" cy="36" r="10" fill="rgba(124,111,255,0.3)" stroke="#7c6fff" stroke-width="1.5"/>
+            <circle cx="90" cy="70" r="10" fill="rgba(124,111,255,0.35)" stroke="#7c6fff" stroke-width="2"/>
+            <circle cx="90" cy="104" r="10" fill="rgba(124,111,255,0.3)" stroke="#7c6fff" stroke-width="1.5"/>
+            <circle cx="90" cy="138" r="10" fill="rgba(124,111,255,0.25)" stroke="#7c6fff" stroke-width="1.5"/>
+            <!-- Hidden layer 2 -->
+            <circle cx="150" cy="50" r="10" fill="rgba(67,232,176,0.25)" stroke="#43e8b0" stroke-width="1.5"/>
+            <circle cx="150" cy="90" r="10" fill="rgba(67,232,176,0.35)" stroke="#43e8b0" stroke-width="2"/>
+            <circle cx="150" cy="130" r="10" fill="rgba(67,232,176,0.25)" stroke="#43e8b0" stroke-width="1.5"/>
+            <!-- Output layer -->
+            <circle cx="200" cy="70" r="11" fill="rgba(255,107,107,0.25)" stroke="#ff6b6b" stroke-width="2"/>
+            <circle cx="200" cy="110" r="11" fill="rgba(255,107,107,0.2)" stroke="#ff6b6b" stroke-width="1.5"/>
+            <!-- Connections input->h1 -->
+            <line x1="40" y1="50" x2="80" y2="36" stroke="rgba(124,111,255,0.25)" stroke-width="1"/>
+            <line x1="40" y1="50" x2="80" y2="70" stroke="rgba(124,111,255,0.35)" stroke-width="1.2"/>
+            <line x1="40" y1="50" x2="80" y2="104" stroke="rgba(124,111,255,0.2)" stroke-width="1"/>
+            <line x1="40" y1="50" x2="80" y2="138" stroke="rgba(124,111,255,0.15)" stroke-width="1"/>
+            <line x1="40" y1="90" x2="80" y2="36" stroke="rgba(124,111,255,0.2)" stroke-width="1"/>
+            <line x1="40" y1="90" x2="80" y2="70" stroke="rgba(124,111,255,0.35)" stroke-width="1.2"/>
+            <line x1="40" y1="90" x2="80" y2="104" stroke="rgba(124,111,255,0.3)" stroke-width="1.2"/>
+            <line x1="40" y1="90" x2="80" y2="138" stroke="rgba(124,111,255,0.2)" stroke-width="1"/>
+            <line x1="40" y1="130" x2="80" y2="70" stroke="rgba(124,111,255,0.2)" stroke-width="1"/>
+            <line x1="40" y1="130" x2="80" y2="104" stroke="rgba(124,111,255,0.3)" stroke-width="1.2"/>
+            <line x1="40" y1="130" x2="80" y2="138" stroke="rgba(124,111,255,0.35)" stroke-width="1.2"/>
+            <!-- Connections h1->h2 -->
+            <line x1="100" y1="36" x2="140" y2="50" stroke="rgba(124,111,255,0.3)" stroke-width="1"/>
+            <line x1="100" y1="36" x2="140" y2="90" stroke="rgba(67,232,176,0.25)" stroke-width="1"/>
+            <line x1="100" y1="70" x2="140" y2="50" stroke="rgba(67,232,176,0.35)" stroke-width="1.2"/>
+            <line x1="100" y1="70" x2="140" y2="90" stroke="rgba(67,232,176,0.4)" stroke-width="1.5"/>
+            <line x1="100" y1="70" x2="140" y2="130" stroke="rgba(67,232,176,0.2)" stroke-width="1"/>
+            <line x1="100" y1="104" x2="140" y2="50" stroke="rgba(67,232,176,0.2)" stroke-width="1"/>
+            <line x1="100" y1="104" x2="140" y2="90" stroke="rgba(67,232,176,0.35)" stroke-width="1.2"/>
+            <line x1="100" y1="104" x2="140" y2="130" stroke="rgba(67,232,176,0.3)" stroke-width="1.2"/>
+            <line x1="100" y1="138" x2="140" y2="90" stroke="rgba(67,232,176,0.2)" stroke-width="1"/>
+            <line x1="100" y1="138" x2="140" y2="130" stroke="rgba(67,232,176,0.35)" stroke-width="1.2"/>
+            <!-- Connections h2->output -->
+            <line x1="160" y1="50" x2="189" y2="70" stroke="rgba(255,107,107,0.35)" stroke-width="1.2"/>
+            <line x1="160" y1="50" x2="189" y2="110" stroke="rgba(255,107,107,0.2)" stroke-width="1"/>
+            <line x1="160" y1="90" x2="189" y2="70" stroke="rgba(255,107,107,0.45)" stroke-width="1.5"/>
+            <line x1="160" y1="90" x2="189" y2="110" stroke="rgba(255,107,107,0.35)" stroke-width="1.2"/>
+            <line x1="160" y1="130" x2="189" y2="70" stroke="rgba(255,107,107,0.2)" stroke-width="1"/>
+            <line x1="160" y1="130" x2="189" y2="110" stroke="rgba(255,107,107,0.4)" stroke-width="1.2"/>
+            <!-- Labels -->
+            <text x="18" y="165" font-family="monospace" font-size="7" fill="rgba(124,111,255,0.6)">Input</text>
+            <text x="75" y="165" font-family="monospace" font-size="7" fill="rgba(124,111,255,0.6)">Hidden</text>
+            <text x="134" y="165" font-family="monospace" font-size="7" fill="rgba(67,232,176,0.6)">Hidden</text>
+            <text x="186" y="165" font-family="monospace" font-size="7" fill="rgba(255,107,107,0.6)">Out</text>
+          </svg>
+          <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;">Neural network architecture</p>
+        </div>
+
+        <div class="glass">
+          <h2 class="section-h">AI Knowledge<br><span>&amp; Prowess</span></h2>
+          <p class="section-p" style="margin-bottom:1rem;">
+            AI isn't just a buzzword for me &mdash; it's a <b>tool I actively wield</b> to build smarter
+            products. I work with large language models, integrate AI APIs into real applications,
+            and understand the <b>principles behind machine learning</b> well enough to use them
+            productively in production environments.
+          </p>
+          <p class="section-p" style="margin-bottom:1.2rem;">
+            From <b>prompt engineering</b> to <b>AI-assisted code generation</b>, intelligent chatbots,
+            and data-driven automation scripts written in Python, I bring an AI-first mindset to
+            every project I take on.
+          </p>
+          <div class="ai-chips">
+            <span class="ai-chip">LLM Integration</span>
+            <span class="ai-chip">Prompt Engineering</span>
+            <span class="ai-chip">AI API (REST)</span>
+            <span class="ai-chip">Python ML Scripts</span>
+            <span class="ai-chip">Chatbot Dev</span>
+            <span class="ai-chip">AI-Assisted Dev</span>
+            <span class="ai-chip">Data Automation</span>
+            <span class="ai-chip">NLP Basics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TIME MANAGEMENT & SPEED ══ -->
+    <div class="reveal">
+      <div class="label">Delivery &amp; Efficiency</div>
+      <div class="glass">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+          <div>
+            <h2 class="section-h">Time Management<br><span>&amp; Speed</span></h2>
+            <p class="section-p" style="margin-bottom:1rem;">
+              Speed without quality is just noise. I operate with a <b>structured sprint mindset</b>:
+              every project is broken into deliverables with clear milestones, honest deadlines,
+              and daily momentum. Clients consistently receive work <b>on time or ahead of schedule</b>.
+            </p>
+            <p class="section-p">
+              My workflow is heavily optimised &mdash; I use component libraries, reusable code
+              modules, and AI-assisted scaffolding to dramatically reduce repetitive work and
+              redirect that time toward <b>solving the hard, interesting problems</b> in every build.
+            </p>
+          </div>
+
+          <!-- Efficiency SVG chart -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:0.8rem;">
+            <svg width="200" height="160" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background grid -->
+              <line x1="20" y1="20" x2="20" y2="130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="60" y1="20" x2="60" y2="130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="100" y1="20" x2="100" y2="130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="140" y1="20" x2="140" y2="130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="180" y1="20" x2="180" y2="130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="20" y1="130" x2="180" y2="130" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="20" y1="70" x2="180" y2="70" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="20" y1="40" x2="180" y2="40" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <!-- Area fill -->
+              <path d="M20,120 L60,100 L100,80 L140,55 L180,30 L180,130 L20,130 Z" fill="rgba(124,111,255,0.1)"/>
+              <!-- Line -->
+              <polyline points="20,120 60,100 100,80 140,55 180,30" stroke="#7c6fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Dots -->
+              <circle cx="20" cy="120" r="4" fill="#7c6fff"/>
+              <circle cx="60" cy="100" r="4" fill="#7c6fff"/>
+              <circle cx="100" cy="80" r="4" fill="#7c6fff"/>
+              <circle cx="140" cy="55" r="5" fill="#43e8b0"/>
+              <circle cx="180" cy="30" r="5" fill="#43e8b0"/>
+              <!-- X labels -->
+              <text x="14" y="144" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.3)">Y1</text>
+              <text x="54" y="144" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.3)">Y2</text>
+              <text x="94" y="144" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.3)">Y3</text>
+              <text x="134" y="144" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.3)">Y4</text>
+              <text x="172" y="144" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.3)">Now</text>
+            </svg>
+            <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-align:center;">Delivery speed growth over 4 years</p>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem;">
+          <div class="metrics-grid">
+            <div class="metric-tile">
+              <div class="big">98%</div>
+              <div class="unit">On-Time<br>Delivery</div>
+            </div>
+            <div class="metric-tile">
+              <div class="big">&lt;48h</div>
+              <div class="unit">Avg. First<br>Prototype</div>
+            </div>
+            <div class="metric-tile">
+              <div class="big">3x</div>
+              <div class="unit">Faster via<br>AI Tooling</div>
+            </div>
+            <div class="metric-tile">
+              <div class="big">0</div>
+              <div class="unit">Missed<br>Deadlines</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ EXPERIENCE TIMELINE ══ -->
+    <div class="reveal">
+      <div class="label">Experience</div>
+      <div class="two-col">
+        <div class="glass">
+          <h2 class="section-h">4+ Years of<br><span>Real-World Builds</span></h2>
+          <p class="section-p" style="margin-bottom:1.6rem;">
+            My experience isn't confined to one niche. Over four years I've taken on
+            <b>diverse, real-world projects</b> across industries &mdash; from fashion and e-commerce
+            to gaming platforms and business tools &mdash; building full stacks from scratch and
+            shipping them to live users. Each project added a new layer of architectural
+            understanding and refined my craft.
+          </p>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-year">2021 &mdash; Foundations</div>
+              <div class="tl-title">First Freelance Projects</div>
+              <div class="tl-desc">Built early business websites and landing pages using HTML, CSS, JavaScript, and PHP. Established my core workflow and client communication style.</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-year">2022 &mdash; Stack Depth</div>
+              <div class="tl-title">Full-Stack &amp; Java Development</div>
+              <div class="tl-desc">Expanded into Java back-end logic and database-driven PHP applications. First multi-page web apps with user authentication, admin dashboards, and dynamic content.</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-year">2023 &mdash; Python &amp; Scale</div>
+              <div class="tl-title">Data, Automation &amp; Scripting</div>
+              <div class="tl-desc">Adopted Python for backend automation, data processing scripts, and server-side tasks. Built more complex UI/UX systems with advanced CSS and JS patterns.</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-year">2024&ndash;Present &mdash; AI Era</div>
+              <div class="tl-title">AI-Integrated Full-Stack</div>
+              <div class="tl-desc">Integrated AI APIs and LLMs into production apps. Delivering faster, smarter builds with AI-assisted development, premium UI systems, and scalable architecture.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Radar SVG -->
+        <div class="glass chart-wrap">
+          <h2 class="section-h" style="text-align:center;">Skill <span>Radar</span></h2>
+          <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Radar background rings -->
+            <polygon points="110,20 190,65 190,155 110,200 30,155 30,65" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <polygon points="110,42 172,76 172,144 110,178 48,144 48,76" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <polygon points="110,64 154,87 154,133 110,156 66,133 66,87" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <polygon points="110,86 136,98 136,122 110,134 84,122 84,98" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <!-- Axes -->
+            <line x1="110" y1="110" x2="110" y2="20" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="190" y2="65" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="190" y2="155" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="110" y2="200" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="30" y2="155" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="30" y2="65" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <!-- Data polygon: Frontend 96, Backend 88, Java 82, Python 85, AI 80, DB 78 -->
+            <!-- Scaled: ring span 110-20=90. Values mapped: 96%=87, 88%=79, 82%=74, 85%=77, 80%=72, 78%=70 -->
+            <polygon
+              points="110,23 183,62 183,150 110,197 37,148 37,64"
+              fill="rgba(124,111,255,0.15)"
+              stroke="#7c6fff"
+              stroke-width="2"
+              stroke-linejoin="round"/>
+            <!-- Axis labels -->
+            <text x="96" y="14" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.5)" text-anchor="middle">Frontend</text>
+            <text x="198" y="62" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.5)" text-anchor="start">Backend</text>
+            <text x="198" y="160" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.5)" text-anchor="start">Java</text>
+            <text x="110" y="214" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.5)" text-anchor="middle">Python</text>
+            <text x="22" y="160" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.5)" text-anchor="end">AI</text>
+            <text x="22" y="62" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.5)" text-anchor="end">Database</text>
+          </svg>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#7c6fff;"></div>Skill depth</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider reveal"></div>
+
+    <!-- ══ CTA ══ -->
+    <div class="cta-band reveal">
+      <h2>Ready to build something<br><span>extraordinary together?</span></h2>
+      <a href="mailto:codekingdomv1@gmail.com" class="cta-btn">Get In Touch Now &rarr;</a>
+    </div>
+
+  </main>
+
+  <script>
+    /* Reveal on scroll */
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => obs.observe(el));
+
+    /* Trigger first batch immediately */
+    document.querySelectorAll('.reveal').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) el.classList.add('in');
+    });
+
+    /* Animate counters */
+    function animateCounter(el, end, suffix) {
+      let start = 0;
+      const step = end / 50;
+      const timer = setInterval(() => {
+        start += step;
+        if (start >= end) { start = end; clearInterval(timer); }
+        el.textContent = Math.round(start) + (suffix || '');
+      }, 30);
+    }
+  </script>
+
+</body>
+</html>

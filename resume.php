@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resume — Favour Stephen Obamuwe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #5b6fff;
+      --accent-dim: rgba(91,111,255,0.25);
+      --glass-bg: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.12);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Syne', sans-serif; background: #060614; color: #fff; min-height: 100vh; overflow-x: hidden; }
+
+    /* BG */
+    .bg-wrap { position: fixed; inset: 0; z-index: -2; overflow: hidden; }
+    .bg-vid  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.35; pointer-events: none; }
+    .bg-ov   { position: fixed; inset: 0; z-index: -1; background: linear-gradient(150deg, rgba(4,4,24,0.90) 0%, rgba(6,4,20,0.82) 100%); pointer-events: none; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 2.5rem; background: rgba(0,0,0,0.28); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .nav-logo { font-family: 'Space Mono', monospace; font-size: 1rem; font-weight: 700; color: #fff; text-decoration: none; letter-spacing: 0.06em; }
+    .nav-logo sub { font-size: 0.62em; opacity: 0.55; vertical-align: sub; }
+    .nav-back { font-family: 'Space Mono', monospace; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.65); text-decoration: none; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 0.4rem 1rem; transition: color 0.2s, border-color 0.2s, box-shadow 0.2s; }
+    .nav-back:hover { color: #fff; border-color: rgba(255,255,255,0.6); box-shadow: 0 0 12px rgba(255,255,255,0.12); }
+
+    /* PAGE WRAPPER */
+    .page { padding: 6rem 2rem 4rem; display: flex; flex-direction: column; align-items: center; gap: 2rem; position: relative; z-index: 1; }
+
+    /* TOP BAR */
+    .top-bar { width: 100%; max-width: 920px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .top-bar-title { display: flex; flex-direction: column; gap: 0.3rem; }
+    .top-bar-title h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.3rem,3.5vw,1.8rem); font-weight: 800; }
+    .top-bar-title p  { font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+    .btn-group { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.65rem 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 6px; cursor: pointer; text-decoration: none; transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s; border: none; }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 20px var(--accent-dim); }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-dim); }
+    .btn-outline { background: transparent; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-outline:hover { color: #fff; border-color: rgba(255,255,255,0.55); box-shadow: 0 0 14px rgba(255,255,255,0.08); }
+
+    /* PDF VIEWER FRAME */
+    .viewer-wrap { width: 100%; max-width: 920px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 60px rgba(0,0,0,0.55); }
+    .viewer-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.2rem; background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .viewer-topbar-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+    .viewer-dots { display: flex; gap: 6px; }
+    .viewer-dots span { width: 10px; height: 10px; border-radius: 50%; display: block; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+
+    .pdf-embed { width: 100%; height: 82vh; min-height: 500px; display: block; border: none; background: #fff; }
+
+    /* FALLBACK (for browsers that don't embed PDFs) */
+    .pdf-fallback { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 1.4rem; padding: 4rem 2rem; text-align: center; }
+    .pdf-fallback svg { opacity: 0.35; }
+    .pdf-fallback p { font-size: 0.88rem; color: rgba(255,255,255,0.5); max-width: 36ch; line-height: 1.7; }
+
+    /* HIGHLIGHTS STRIP */
+    .highlights { width: 100%; max-width: 920px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .hl-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 14px; padding: 1.4rem 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; transition: border-color 0.25s, transform 0.25s; }
+    .hl-card:hover { border-color: rgba(91,111,255,0.5); transform: translateY(-4px); }
+    .hl-num  { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; color: #fff; line-height: 1; }
+    .hl-unit { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+    .hl-desc { font-size: 0.78rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+    /* FOOTER */
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    footer p { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.22); }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.2rem; }
+      .highlights { grid-template-columns: 1fr 1fr; }
+      .pdf-embed { height: 60vh; }
+    }
+    @media (max-width: 400px) {
+      .highlights { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-wrap">
+    <video class="bg-vid" src="darkback.mp4" autoplay muted loop playsinline></video>
+  </div>
+  <div class="bg-ov"></div>
+
+  <nav>
+    <a href="index.php" class="nav-logo">steveport v<sub>3</sub></a>
+    <a href="index.php" class="nav-back">&#8592; Portfolio</a>
+  </nav>
+
+  <div class="page">
+
+    <!-- Top bar -->
+    <div class="top-bar">
+      <div class="top-bar-title">
+        <h1>Resume &mdash; Favour Stephen Obamuwe</h1>
+        <p>Full-Stack Developer &nbsp;&bull;&nbsp; 4+ Years &nbsp;&bull;&nbsp; AI-Augmented</p>
+      </div>
+      <div class="btn-group">
+        <a href="resume.pdf" download="Favour_Stephen_Obamuwe_Resume.pdf" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </a>
+        <a href="about.php" class="btn btn-outline">
+          About Me
+        </a>
+        <a href="mailto:codekingdomv1@gmail.com" class="btn btn-outline">
+          Hire Me
+        </a>
+      </div>
+    </div>
+
+    <!-- Highlights strip -->
+    <div class="highlights">
+      <div class="hl-card">
+        <div class="hl-num">4+</div>
+        <div class="hl-unit">Years Experience</div>
+        <div class="hl-desc">Building production-grade web products independently since 2021.</div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-num">5.0</div>
+        <div class="hl-unit">GPA — Miva Open Uni</div>
+        <div class="hl-desc">Perfect GPA in B.Sc. Computer Science, maintained alongside active freelance work.</div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-num">6</div>
+        <div class="hl-unit">Languages Mastered</div>
+        <div class="hl-desc">JS, PHP, Python, Java, HTML &amp; CSS — fluent across the full stack.</div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-num">0</div>
+        <div class="hl-unit">Missed Deadlines</div>
+        <div class="hl-desc">Every commitment met. Deadline discipline is a non-negotiable professional standard.</div>
+      </div>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div class="viewer-wrap">
+      <div class="viewer-topbar">
+        <div class="viewer-dots">
+          <span class="dot-r"></span>
+          <span class="dot-y"></span>
+          <span class="dot-g"></span>
+        </div>
+        <span class="viewer-topbar-label">Favour_Stephen_Obamuwe_Resume.pdf</span>
+        <a href="resume.pdf" download="Favour_Stephen_Obamuwe_Resume.pdf" class="btn btn-primary" style="padding:0.35rem 0.9rem;font-size:0.6rem;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Save
+        </a>
+      </div>
+      <object class="pdf-embed" data="resume.pdf" type="application/pdf">
+        <div class="pdf-fallback" style="display:flex;">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <p>Your browser does not support embedded PDFs. Download the file to view it.</p>
+          <a href="resume.pdf" download="Favour_Stephen_Obamuwe_Resume.pdf" class="btn btn-primary">Download Resume PDF</a>
+        </div>
+      </object>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; Steveport v3 2026 &nbsp;&middot;&nbsp; Favour Stephen Obamuwe &nbsp;&middot;&nbsp; codekingdomv1@gmail.com</p>
+  </footer>
+
+</body>
+</html>
